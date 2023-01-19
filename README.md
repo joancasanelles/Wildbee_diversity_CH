@@ -1,4 +1,4 @@
-# Wildbee_diversity_CH
+# Wild bee diversity in Switzerland
 
 ## Description
 
