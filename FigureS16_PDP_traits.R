@@ -1,17 +1,15 @@
 #######################################
-### Paper: 
-### Script to produce Figures SX-SX, variable importance and PDP of 8 functional traits
-### Author:
-### Date: 
-###
-###
+### Paper: Wild bee taxonomic and functional metrics reveal a spatial mismatch between α- and ß-diversity in Switzerland
+### Script to produce FigureS16 PDP of 8 functional traits
+### Author: Joan Casanelles-Abella & Bertrand Fournier
+### Date: 19.01.2023
 #######################################
 ### ===================================
 ###  Initialise the system
 ### ===================================
 # Remove all R objects in the workspace
 rm(list = ls())
-setwd("~/Dropbox/City4bees/Analyses/bees_switzerland/")
+setwd("input/")
 # Package
 require(raster)
 require(viridis)
@@ -26,14 +24,14 @@ scaleFUN <- function(x) sprintf("%.2f", x)
 ###  Data
 ### ===================================
 ### load the data -----------------------------------------------------------------------
-pdp.belowground <- read.delim("DATA/Selected descriptors/Results_2022_04_28/belowgound_pdp.txt")
-pdp.cleptoparasite <- read.delim("DATA/Selected descriptors/Results_2022_04_28/cleptoparasite_pdp.txt")
-pdp.feeding_specialization <- read.delim("DATA/Selected descriptors/Results_2022_04_28/feeding_specialization_pdp.txt")
-pdp.ITD <- read.delim("DATA/Selected descriptors/Results_2022_04_28/ITD_pdp.txt")
-pdp.phenoduration <- read.delim("DATA/Selected descriptors/Results_2022_04_28/phenoduration_pdp.txt")
-pdp.phenostart<- read.delim("DATA/Selected descriptors/Results_2022_04_28/phenostart_pdp.txt")
-pdp.solitary <- read.delim("DATA/Selected descriptors/Results_2022_04_28/solitary_pdp.txt")
-pdp.tong_length <- read.delim("DATA/Selected descriptors/Results_2022_04_28/tong_length_pdp.txt")
+pdp.belowground <- read.delim("belowgound_pdp.txt")
+pdp.cleptoparasite <- read.delim("cleptoparasite_pdp.txt")
+pdp.feeding_specialization <- read.delim("feeding_specialization_pdp.txt")
+pdp.ITD <- read.delim("ITD_pdp.txt")
+pdp.phenoduration <- read.delim("phenoduration_pdp.txt")
+pdp.phenostart<- read.delim("phenostart_pdp.txt")
+pdp.solitary <- read.delim("solitary_pdp.txt")
+pdp.tong_length <- read.delim("tong_length_pdp.txt")
 ### ===================================
 ###  Function to plot
 ### ===================================
@@ -124,10 +122,10 @@ p.tong_length<- Make_PDP_plot_all(dat=pdp.tong_length, ylabel="", labels=c(0.42,
 figure.all <-  ggpubr::ggarrange(p.belowground,p.cleptoparasite,p.feeding_specialization,p.ITD,p.phenoduration,p.phenostart,p.solitary,p.tong_length,
                          nrow = 8, ncol=1)
 ## Export
-figure.all %>% ggexport(filename = "OUTPUT/Vimp_PDP/Fig5_PDP_traits.png",
+figure.all %>% ggexport(filename = "output/Fig5_PDP_traits.png",
                         width = 1500, height = 1200)
 
-figure.all %>% ggexport(filename = "OUTPUT/Vimp_PDP/Fig5_PDP_traits.pdf",
+figure.all %>% ggexport(filename = "output/Fig5_PDP_traits.pdf",
                         width = 20, height = 17)
 
 

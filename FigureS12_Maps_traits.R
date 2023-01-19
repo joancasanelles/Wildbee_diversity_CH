@@ -1,5 +1,12 @@
+#######################################
+### Paper: Wild bee taxonomic and functional metrics reveal a spatial mismatch between α- and ß-diversity in Switzerland
+### Script to produce Figure S12 map CWM 8 traits
+### Author: Joan Casanelles-Abella & Bertrand Fournier
+### Date: 19.01.2023
+#######################################
 # Remove all R objects in the workspace
 rm(list = ls())
+setwd("input/")
 
 require(raster)
 require(viridis)
@@ -7,8 +14,7 @@ require(ggplot2)
 library(sp)
 library(sf)
 ### load the data -----------------------------------------------------------------------
-setwd("~/Dropbox/City4bees/Analyses/bees_switzerland/")
-div <- stack(x = "DATA/Selected descriptors/Results_2022_04_28/Diversity_stack_revised_Selected_descriptors.tif")
+div <- stack(x = "Diversity_stack_revised_Selected_descriptors.tif")
 names(div) = c("belowgound","cleptoparasite","FDis", "feeding_specialization", 
                "FEve", "FRic", "InvSimpson", "ITD","LCBD_fun" ,"LCBD_taxo","phenoduration",
                "phenostart", "Rao", "Richness", "Shannon",  "Simpson",
@@ -22,12 +28,12 @@ ITD <- div$ITD
 solitary <- div$solitary
 tong_length<- div$tong_length
 ### water bodies
-water_bodies=raster("~/Dropbox/City4bees/Analyses/bees_switzerland/DATA/water_bodies1.tif")
+water_bodies=raster("water_bodies1.tif")
 ### categorical map -> function
 map_cat <- function(ras, title, labels){
   require(RColorBrewer)
   ras=mask(x = ras, mask = water_bodies,maskvalue = 1)
-  writeRaster(x = ras, filename = paste("DATA/Masked_responses/CWM/masked.",title,".tiff",sep=""), overwrite=T)
+  writeRaster(x = ras, filename = paste("output/masked.",title,".tiff",sep=""), overwrite=T)
   ras.df <- as.data.frame(cut(ras, breaks=c(quantile(ras)), right=FALSE), xy = TRUE)
   names(ras.df) = c("x","y","layer")
   p <- ggplot() +
@@ -105,10 +111,9 @@ figure.maps.traits <- ggarrange(p_belowgound, p_cleptoparasite, p_feeding_specia
                     nrow = 5, ncol=2, 
                     heights = rep(1,5))
 
-setwd("C:/Users/Bertrand/Dropbox/Projects/City4Bees/Figures")
 require("magrittr")
 require("ggpubr")
-figure.maps.traits %>% ggexport(filename = "OUTPUT/maps/Community_atributes/Fig2_Diversity_Maps_traits.png",
+figure.maps.traits %>% ggexport(filename = "output/Maps_traits.png",
                     width = 1300, height = 1300)
-figure.maps.traits %>% ggexport(filename = "OUTPUT/maps/Community_atributes/Fig2_Diversity_Maps_traits.pdf",
+figure.maps.traits %>% ggexport(filename = "output/Maps_traits.pdf",
                     width = 17, height = 17)

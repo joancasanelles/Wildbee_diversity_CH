@@ -1,15 +1,15 @@
 #######################################
-### Paper: Wild bee diversity in Switzerland
-### Script: Figure 1
-### Author: Joan Casanelles Abella
-### Date: 05.2022
+### Paper: Wild bee taxonomic and functional metrics reveal a spatial mismatch between α- and ß-diversity in Switzerland
+### Script to produce Figure 1 maps responses
+### Author: Joan Casanelles-Abella & Bertrand Fournier
+### Date: 19.01.2023
 #######################################
 ### ===================================
 ###  Initialise the system
 ### ===================================
 # Remove all R objects in the workspace
 rm(list = ls())
-setwd("PATH")
+setwd("input/")
 # Package
 library(raster)
 library(viridis)
@@ -114,7 +114,7 @@ figure <- ggpubr::ggarrange(p_rich, p_sha, p_TOP, p_TED, p_FDis,p_lcbd_t, p_lcbd
                     heights = rep(1,6))
 
 
-figure %>% ggexport(filename = "Fig1_Diversity_Maps_revised2.png",
+figure %>% ggexport(filename = "output/Fig1_Diversity_Maps_revised2.png",
                     width = 1300, height = 1300)
-figure %>% ggexport(filename = "Fig1_Diversity_Maps_revised2.pdf",
+figure %>% ggexport(filename = "output/Fig1_Diversity_Maps_revised2.pdf",
                     width = 17, height = 17)

@@ -1,15 +1,15 @@
 #######################################
-### Paper: Wild bee diversity in Switzerland
-### Script: Figure 5
+### Paper: Wild bee taxonomic and functional metrics reveal a spatial mismatch between α- and ß-diversity in Switzerland
+### Script to produce Figure 5 proportion protected cells
 ### Author: Joan Casanelles-Abella & Bertrand Fournier
-### Date: 11.2022 
+### Date: 19.01.2023
 #######################################
 ### ===================================
 ###  Initialise the system
 ### ===================================
 # Remove all R objects in the workspace
 rm(list = ls())
-setwd("~/Dropbox/City4bees/Analyses/bees_switzerland/")
+setwd("input/")
 # Packages
 require(raster)
 require(viridis)
@@ -25,20 +25,20 @@ library(dplyr)
 ###  Data
 ### ===================================
 ### load the data -----------------------------------------------------------------------
-rasterstack.responses=stackOpen("~/Dropbox/City4bees/Analyses/bees_switzerland/DATA/Selected descriptors/Results_2022_04_28/Masked_responses/rasterstack.responses.tif")
+rasterstack.responses=stack("masked.stack.all.diversity.tiff") 
 names(rasterstack.responses) = c("FDis", "TED", "TOP", "LCBD_fun", "LCBD_taxo", "shannon", "rich")
 ## Water bodies
-water_bodies=raster("DATA/water_bodies1.tif")
+water_bodies=raster("water_bodies1.tif")
 ## Elevation
-elevation=raster("DATA/dhm_25.tif")
+elevation=raster("dhm_25.tif")
 crs(elevation) = crs(rasterstack.responses[[1]])
 
 ## PAs
-PA.sensu.stricto=raster("DATA/PA.sensu.stricto.tiff")
+PA.sensu.stricto=raster("PA.sensu.stricto.tiff")
 
-PA.sensu.lato=raster("DATA/PA.sensu.lato.tiff") #all PA
+PA.sensu.lato=raster("PA.sensu.lato.tiff") #all PA
 
-PA.sensu.lato.only=raster("DATA/PA.sensu.lato2.tiff")
+PA.sensu.lato.only=raster("PA.sensu.lato2.tiff")
 
 PA.coordinates=as.data.frame(coordinates(rasterstack.responses$TOP))
 
@@ -71,7 +71,7 @@ elevationExtr.df=na.omit(elevationExtr.df)
   # Omit
   elevation3.pas[is.na(elevation3.pas)] = 0
   ## Responses
-div <- stack("~/Dropbox/City4bees/Analyses/bees_switzerland/DATA/Selected descriptors/Results_2022_04_28/Diversity_stack_revised_Selected_descriptors.tif")
+div <- stack("Diversity_stack_revised_Selected_descriptors.tif")
 names(div) = c("belowgound","cleptoparasite","FDis", "feeding_specialization", 
                "FEve", "FRic", "InvSimpson", "ITD","LCBD_fun" ,"LCBD_taxo","phenoduration",
                "phenostart", "Rao", "Richness", "Shannon",  "Simpson",
@@ -220,12 +220,12 @@ plot_pas_elevation2=ggplot(elevation.pas2, aes(x=elevation, y=prop_P)) +
   scale_x_continuous(name = "Elevation (m)", limits = c(0, 3500)) +
   ylab("Proportion protected cells")
 ### Plot PA
-tiff(filename = "OUTPUT/PA_sensu_lato.tiff")
+tiff(filename = "output/PA_sensu_lato.tiff")
 plot(TOP, axes=F, legend=F, box=F, col="grey90")
 plot(PAs2, axes=F, legend=F, box=F, add=T, col="#693D3D")
 dev.off()
 
-tiff(filename = "OUTPUT/PA_sensu_stricto.tiff")
+tiff(filename = "output/PA_sensu_stricto.tiff")
 plot(TOP, axes=F, legend=F, box=F, col="grey90")
 plot(PAs, axes=F, legend=F, box=F, add=T, col="#693D3D")
 dev.off()
@@ -235,10 +235,10 @@ figure= ggpubr::ggarrange(pp, plot_pas_elevation2, plot_pas_elevation,
           font.label = list(size=16),
           nrow = 1, ncol=3)
 ### Export
-figure %>% ggexport(filename = "OUTPUT/Fig_Protected_cells.png",
+figure %>% ggexport(filename = "output/Protected_cells_all.png",
                 width = 1700, height = 1200)
 
-figure %>% ggexport(filename = "OUTPUT//Fig_VProtected_cells.pdf",
+figure %>% ggexport(filename = "output/Protected_cells_all.pdf",
                 width = 14, height = 5)
 
 
@@ -338,12 +338,12 @@ plot_pas_elevation2=ggplot(elevation.pas2, aes(x=elevation, y=prop_P)) +
   scale_x_continuous(name = "Elevation (m)", limits = c(0, 3500)) +
   ylab("Proportion protected cells")
 ### Plot PA
-tiff(filename = "OUTPUT/PA_sensu_lato.tiff")
+tiff(filename = "output/PA_sensu_lato.tiff")
 plot(TOP, axes=F, legend=F, box=F, col="grey90")
 plot(PAs2, axes=F, legend=F, box=F, add=T, col="#693D3D")
 dev.off()
 
-tiff(filename = "OUTPUT/PA_sensu_stricto.tiff")
+tiff(filename = "output/PA_sensu_stricto.tiff")
 plot(TOP, axes=F, legend=F, box=F, col="grey90")
 plot(PAs, axes=F, legend=F, box=F, add=T, col="#693D3D")
 dev.off()
@@ -353,12 +353,11 @@ figure= ggpubr::ggarrange(pp, plot_pas_elevation2, plot_pas_elevation,
                           font.label = list(size=16),
                           nrow = 1, ncol=3)
 ### Export
-figure %>% ggexport(filename = "OUTPUT/Protected_areas/Fig_Protected_cells.png",
+figure %>% ggexport(filename = "output/Protected_cells_ss.png",
                     width = 1700, height = 1200)
 
-figure %>% ggexport(filename = "OUTPUT/Protected_areas//Fig_VProtected_cells.pdf",
+figure %>% ggexport(filename = "output/Protected_cells_ss.pdf",
                     width = 14, height = 5)
-
 
 
 ### ==========================================
@@ -464,9 +463,9 @@ figure= ggpubr::ggarrange(pp, plot_pas_elevation2, plot_pas_elevation,
                           font.label = list(size=16),
                           nrow = 1, ncol=3)
 ### Export
-figure %>% ggexport(filename = "OUTPUT/Protected_areas/Fig_Protected_cells_PA_sl_only.png",
+figure %>% ggexport(filename = "output/Protected_cells_PA_sl_only.png",
                     width = 1700, height = 1200)
 
 
-figure %>% ggexport(filename = "OUTPUT/Protected_areas/Fig_Protected_cells_PA_sl_only.pdf",
+figure %>% ggexport(filename = "output/Protected_cells_PA_sl_only.pdf",
                     width = 14, height = 5)

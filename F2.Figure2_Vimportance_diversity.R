@@ -1,15 +1,15 @@
 #######################################
-### Paper: Wild bee diversity in Switzerland
-### Script: Figure 2
-### Author: Joan Casanelles Abella
-### Date: 11.2022
+### Paper: Wild bee taxonomic and functional metrics reveal a spatial mismatch between α- and ß-diversity in Switzerland
+### Script to produce Figure 2 Variable importance
+### Author: Joan Casanelles-Abella & Bertrand Fournier
+### Date: 19.01.2023
 #######################################
 ### ===================================
 ###  Initialise the system
 ### ===================================
 # Remove all R objects in the workspace
 rm(list = ls())
-setwd("PATH")
+setwd("input/")
 # Packages
 library(viridis)
 library(ggplot2)
@@ -17,11 +17,8 @@ library(egg)
 library(magrittr)
 library(ggpubr)
 ### load the data -----------------------------------------------------------------------
-varimp <- read.delim("DATA/Selected descriptors/Results_2022_04_28/Diversity_VariableImportance_metrics.txt")
+varimp <- read.delim("Diversity_VariableImportance_metrics.txt")
 varimp = varimp[varimp$variable %in% c("Richness", "Shannon", "TED", "TOP", "FDis", "LCBD_taxo", "LCBD_fun"),]
-
-eval <- read.delim("DATA/Selected descriptors/Results_2022_04_28/Diversity_evaluation_metrics.txt")
-eval = eval[eval$model == "rf" & eval$variable %in% c("Richness", "Shannon", "TED", "TOP", "FDis", "LCBD_taxo", "LCBD_fun"),]
 
 plot_Imp <- function(varimp, var, title){
   
@@ -94,8 +91,8 @@ figure <- ggarrange(imp.rich, imp.sha, imp.TOP, imp.TED, imp.FDis,imp.LCBD_taxo,
                     widths = c(1,1),
                     heights = c(1,1,1))
 ## Export
-figure %>% ggpubr::ggexport(filename = "OUTPUT/Fig4_Variable_Importance_revised.png",
+figure %>% ggpubr::ggexport(filename = "output/Variable_Importance.png",
                     width = 1000, height = 1000)
-figure %>% ggpubr::ggexport(filename = "OUTPUT/Fig4_Variable_Importance_revised.pdf",
+figure %>% ggpubr::ggexport(filename = "output/Variable_Importance.pdf",
                    width = 17, height = 17)
 

@@ -1,15 +1,15 @@
 #######################################
-### Paper: Wild bee diversity in Switzerland
-### Script: Figure 3
+### Paper: Wild bee taxonomic and functional metrics reveal a spatial mismatch between α- and ß-diversity in Switzerland
+### Script to produce Figure 3 partial dependence plots responses
 ### Author: Joan Casanelles-Abella & Bertrand Fournier
-### Date: 11.2022
+### Date: 19.01.2023
 #######################################
 ### ===================================
 ###  Initialise the system
 ### ===================================
 # Remove all R objects in the workspace
 rm(list = ls())
-setwd("PATH")
+setwd("input/")
 # Packages
 library(raster)
 library(viridis)
@@ -21,16 +21,16 @@ library(ggpubr)
 library(ggplot2)
 library(vegan)
 ### load the data -----------------------------------------------------------------------
-pdp.TOP <- read.delim("DATA/OP_pdp.txt")
+pdp.TOP <- read.delim("TOP_pdp.txt")
 pdp.TOP$valueY=pdp.TOP$valueY/100
-pdp.TED <- read.delim("DATA/TEd_pdp.txt")
-pdp.FDis <- read.delim("DATA/FDis_pdp.txt")
-pdp.rich <- read.delim("DATA/Richness_pdp.txt")
+pdp.TED <- read.delim("TEd_pdp.txt")
+pdp.FDis <- read.delim("FDis_pdp.txt")
+pdp.rich <- read.delim("Richness_pdp.txt")
 pdp.rich$valueY=pdp.rich$valueY/100
-pdp.sha <- read.delim("DATA/Shannon_pdp.txt")
-pdp.betataxo <- read.delim("DATA/LCBD_taxo_pdp.txt")
+pdp.sha <- read.delim("Shannon_pdp.txt")
+pdp.betataxo <- read.delim("LCBD_taxo_pdp.txt")
 pdp.betataxo$valueY=pdp.betataxo$valueY*10000
-pdp.betafun <- read.delim("DATA/LCBD_fun_pdp.txt")
+pdp.betafun <- read.delim("LCBD_fun_pdp.txt")
 pdp.betafun$valueY=pdp.betafun$valueY*1000
 ### ===================================
 ###  Ploz
@@ -121,8 +121,8 @@ figure.all <- ggpubr:: ggarrange(p.rich,p.sha,p.TOP,p.TED,p.FDis,p.betataxo,p.be
                     nrow = 7, ncol=1) 
                     
 
-figure.all %>% ggexport(filename = "Fig5_PDP_new.png",
+figure.all %>% ggexport(filename = "output/PDP_diversity.png",
                     width = 1500, height = 1200)
 
-figure.all %>% ggexport(filename = "Fig5_PDP_new.pdf",
+figure.all %>% ggexport(filename = "output/PDP_diversity.pdf",
                     width = 21, height = 17)

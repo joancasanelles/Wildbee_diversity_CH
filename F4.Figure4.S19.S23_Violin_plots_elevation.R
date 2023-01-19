@@ -1,15 +1,15 @@
 #######################################
-### Paper: Wild bee diversity in Switzerland
+### Paper: Wild bee taxonomic and functional metrics reveal a spatial mismatch between α- and ß-diversity in Switzerland
+### Script to produce Figure 4, S19-S23 violin plots diversity metrics along elevation
 ### Author: Joan Casanelles-Abella & Bertrand Fournier
-### Date: 11.11.2022 
-### Script: Figure 4
+### Date: 19.01.2023
 #######################################
 ### ===================================
 ###  Initialise the system
 ### ===================================
 # Remove all R objects in the workspace
 rm(list = ls())
-setwd("PATH")
+setwd("input/")
 # Packages
 library(dplyr)
 library(raster)
@@ -25,15 +25,15 @@ scaleFUN <- function(x) sprintf("%.2f", x)
 ###  Data
 ### ===================================
 ### load the data -----------------------------------------------------------------------
-div <- stack("masked.stack.all.diversity.tiff") # No water bodies
+div <- stack("masked.stack.all.diversity.tiff") 
 names(div) = c("feeding_specialization", "ITD", "phenoduration","phenostart", "belowgound","cleptoparasite", 
                "solitary","tong_length", "FDis",  "TED", "TOP","LCBD_fun" ,"LCBD_taxo","Shannon", "Richness")
 ### Elevation, LU and LC-----------------------------------------------------------------------
 ### Elevation
-elevation = raster("~/Dropbox/City4bees/Analyses/bees_switzerland/DATA/Elevation/dhm_25.tif")
+elevation = raster("dhm_25.tif")
 crs(elevation) = "+proj=somerc +lat_0=46.9524055555556 +lon_0=7.43958333333333 +k_0=1 +x_0=600000 +y_0=200000 +ellps=bessel +units=m +no_defs"
 ###LU & LC
-LU = raster("~/Dropbox/City4bees/Analyses/bees_switzerland/DATA/LU:LC/Landuse_100x100.tif")
+LU = raster("Landuse_100x100.tif")
 LU=raster::mask(x = LU, mask = water_bodies, maskvalue = 1)
 LU.df=as.data.frame(LU)
 LU.df=cbind(LU.df, coordinates(LU))
@@ -288,10 +288,10 @@ p3=ggplot(d.per[d.per$elevation=="2000-3500",],
 FI=ggarrange(p1,p2,p3, nrow = 3, ncol = 1)
 
 
-FI %>% ggexport(filename = "percentage.landcover.elevation.png",
+FI %>% ggexport(filename = "output/percentage.landcover.elevation.png",
                     width = 1200, height = 400)
 
-FI %>% ggexport(filename = "percentage.landcover.elevation.pdf",
+FI %>% ggexport(filename = "output/percentage.landcover.elevation.pdf",
                     width = 6, height = 3)
 
 

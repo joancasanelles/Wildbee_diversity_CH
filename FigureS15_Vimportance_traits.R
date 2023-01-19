@@ -1,18 +1,15 @@
 #######################################
-###
-###
-###
-###
-###
-###
+### Paper: Wild bee taxonomic and functional metrics reveal a spatial mismatch between α- and ß-diversity in Switzerland
+### Script to produce Figures S15 variable importance of 8 functional traits
+### Author: Joan Casanelles-Abella & Bertrand Fournier
+### Date: 19.01.2023
 #######################################
-
 ### ===================================
 ###  Initialise the system
 ### ===================================
 # Remove all R objects in the workspace
 rm(list = ls())
-setwd("~/Dropbox/City4bees/Analyses/bees_switzerland/")
+setwd("input/")
 # Packages
 require(raster)
 require(viridis)
@@ -23,7 +20,7 @@ require(egg)
 ### ===================================
 ###  Data
 ### ===================================
-varimp <- read.delim("DATA/Selected descriptors/Results_2022_04_28/Diversity_VariableImportance_metrics.txt")
+varimp <- read.delim("Diversity_VariableImportance_metrics.txt")
 varimp = varimp[varimp$variable %in% c("belowgound","cleptoparasite", "feeding_specialization", 
                                        "ITD","phenoduration","phenostart", "solitary", "tong_length"),]
 ### ===================================
@@ -104,7 +101,7 @@ figure <- ggarrange(imp.below, imp.clepto, imp.feeding,
                     labels = paste("(",letters[1:8], ")", sep=""),
                     nrow = 4, ncol=2)
 ### Export
-figure %>% ggexport(filename = "OUTPUT/Vimp_PDP/FigS_Variable_Importance_revised_traits.png",
+figure %>% ggexport(filename = "output/FigS_Variable_Importance_revised_traits.png",
                     width = 1000, height = 1000)
-figure %>% ggexport(filename = "OUTPUT/Vimp_PDP/FigS_Variable_Importance_revised_traits.pdf",
+figure %>% ggexport(filename = "output/FigS_Variable_Importance_revised_traits.pdf",
                     width = 17, height = 17)

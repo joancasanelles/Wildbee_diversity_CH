@@ -1,17 +1,15 @@
 #######################################
-### Paper: Wild bee diversity in Switzerland
-###
+### Paper: Wild bee taxonomic and functional metrics reveal a spatial mismatch between α- and ß-diversity in Switzerland
+### Script to produce Figure S18 violin plots of CWM of the 8 traits
 ### Author: Joan Casanelles-Abella & Bertrand Fournier
-### Date: 11.11.2022
-### # Script: violin plots
-###
+### Date: 19.01.2023
 #######################################
 ### ===================================
 ###  Initialise the system
 ### ===================================
 # Remove all R objects in the workspace
 rm(list = ls())
-setwd("~/Dropbox/City4bees/Analyses/bees_switzerland/")
+setwd("input/")
 # Packages
 library(dplyr)
 require(raster)
@@ -26,15 +24,14 @@ library(egg)
 ### ===================================
 ### load the data -----------------------------------------------------------------------
 ## water bodies
-water.bodies=raster("DATA/water_bodies1.tif")
+water.bodies=raster("water_bodies1.tif")
 ## LU
-LU = raster("DATA/Landuse_100x100.tif")
+LU = raster("Landuse_100x100.tif")
 ## Elevation
-elevation=raster("DATA/dhm_25.tif")
+elevation=raster("dhm_25.tif")
 crs(elevation) = crs(water.bodies)
 ## divwrsity
-div <- stack(x = "DATA/Selected descriptors/Results_2022_04_28/Diversity_stack_revised_Selected_descriptors.tif")
-div <- stack("~/Dropbox/City4bees/Analyses/bees_switzerland/DATA/Masked_responses/masked.stack.all.diversity.tiff")
+div <- stack("masked.stack.all.diversity.tiff")
 names(div) = c("feeding_specialization", "ITD", "phenoduration","phenostart", "belowgound","cleptoparasite", 
                "solitary","tong_length", "FDis",  "TOP", "TED","LCBD_fun" ,"LCBD_taxo","Shannon", "Richness")
 #### for(i in 1:nlayers(div)){  div[[i]]=mask(x = div[[i]], mask = water.bodies,maskvalue = 1)}
@@ -85,7 +82,7 @@ dat2$coordsmerge=paste(dat2$x, dat2$y)
 dat2=cbind(dat2, data.frame(elevation=raster::extract(elevation,dat2[,c("x", "y")])))
 ### Extract PA data -----------------------------------------------------------------------
 ## Protected areas sensu stricto
-PAs = raster("~/Dropbox/City4bees/Analyses/bees_switzerland/DATA/PA.sensu.stricto.tiff")
+PAs = raster("PA.sensu.stricto.tiff")
 pavals=raster::extract(PAs, coordinates(PAs))
 PAs_df=data.frame(PA=pavals, coordinates(PAs))
 PAs_df=na.omit(PAs_df)
@@ -134,7 +131,7 @@ PAS_median_values$Landuse_100x100[PAS_median_values$Landuse_100x100==3] = "Fores
 
 ## Protected areas sensu lato
 
-PAs2 = raster("~/Dropbox/City4bees/Analyses/bees_switzerland/DATA/PA.sensu.lato.tiff")
+PAs2 = raster("PA.sensu.lato.tiff")
 pavals2=raster::extract(PAs2, coordinates(PAs2))
 PAs2_df=data.frame(PA=pavals2, coordinates(PAs2))
 PAs2_df=na.omit(PAs2_df)
@@ -418,8 +415,8 @@ figure_cwm <- ggpubr::ggarrange(belowgound.violin,cleptoparasite.violin ,
                                       heights = c(1,1,1,1))
 
 
-figure_cwm %>% ggpubr::ggexport(filename = "OUTPUT/Violin_plots/Fig_Violin_CWM_discrete.png",
+figure_cwm %>% ggpubr::ggexport(filename = "output/Fig_Violin_CWM_discrete.png",
                                               width = 900, height = 1200)
 
-figure_cwm %>% ggpubr::ggexport(filename = "OUTPUT/Violin_plots/Fig_Violin_CWM_discrete.pdf",
+figure_cwm %>% ggpubr::ggexport(filename = "output/Fig_Violin_CWM_discrete.pdf",
                                               width = 17, height = 17)

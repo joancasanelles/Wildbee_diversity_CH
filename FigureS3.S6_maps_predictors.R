@@ -1,17 +1,15 @@
 #######################################
-### Paper: 
-### Script to generate Figure SX.
-### Author: Joan Casanelles Abella
-### Date: 
-###
-###
+### Paper: Wild bee taxonomic and functional metrics reveal a spatial mismatch between α- and ß-diversity in Switzerland
+### Script to produce Figure S3-S6 Maps of the environmental predictors, elevation vs. predictors
+### Author: Joan Casanelles-Abella & Bertrand Fournier
+### Date: 19.01.2023
 #######################################
 ### ===================================
 ###  Initialise the system
 ### ===================================
 # Remove all R objects in the workspace
 rm(list = ls())
-setwd("~/Dropbox/City4bees/Analyses/bees_switzerland/")
+setwd("input/")
 # Packages
 require(raster)
 require(viridis)
@@ -24,18 +22,18 @@ library(sf)
 ### load the data -----------------------------------------------------------------------
 
 ## extent CH
-extend.raster=raster("~/Dropbox/City4bees/Analyses/bees_switzerland/DATA/Selected descriptors/Results_2022_04_28/belowgound.tif")
+extend.raster=raster("water_bodies1.tif")
 ## Predictors
   # Climate
-  climate = stack("~/Dropbox/City4bees/Analyses/bees_switzerland/DATA/Data ready for analyses/Climate_PCA_CH_stack.tif")
+  climate = stack("Climate_PCA_CH_stack.tif")
   # Vegetation
-  vegetation = stack("~/Dropbox/City4bees/Analyses/bees_switzerland/DATA/Data ready for analyses/Plant_PC_19_revised.tif")
+  vegetation = stack("Plant_PC_19_revised.tif")
   # Beekeeping
-  beekeeping = stack("~/Dropbox/City4bees/Analyses/bees_switzerland/DATA/Data ready for analyses/beehive-2012-2018.tif")
+  beekeeping = stack("beehive-2012-2018.tif")
   # LU
-  lu=stack("~/Dropbox/City4bees/Analyses/bees_switzerland/DATA/Data ready for analyses/LU_all_stack.tif")
+  lu=stack("LU_all_stack.tif")
 ## Elevation
-elevation = raster("~/Dropbox/City4bees/Analyses/bees_switzerland/DATA/dhm_25.tif")
+elevation = raster("dhm_25.tif")
 crs(elevation) = crs(extend.raster) ## Fix CRS
 elevation=projectRaster(from = elevation, to=extend.raster, res = c(100,100)) ##  Reprojec t
 
@@ -67,7 +65,7 @@ dat2[is.na(dat2)] <- 0
 ## Climate
 masked.climate=mask(x =climate,extend.raster )
 
-png(filename = "~/Dropbox/City4bees/Analyses/bees_switzerland/OUTPUT/maps_climate.png", width = ncol(masked.climate), height = nrow(masked.climate))
+png(filename = "output/maps_climate.png", width = ncol(masked.climate), height = nrow(masked.climate))
 par(mfrow = c(2, 2), mar = c(0.1, 0.1, 0.1, 0.1))
 plot(masked.climate[[1]], legend=F, col=viridis(n = 10,option = "D"),axes=F, main = "", box=F)
 plot(masked.climate[[2]], legend=T, col=viridis(n = 10,option = "D"),axes=F, main = "", box=F, legend.args=list(text='PC axis', side=4, font=2, line=2.5, cex=0.8))
@@ -76,7 +74,7 @@ plot(masked.climate[[4]], legend=F, col=viridis(n = 10,option = "D"),axes=F, mai
 dev.off()
 
 ## Vegetation
-png(filename = "~/Dropbox/City4bees/Analyses/bees_switzerland/OUTPUT/maps_vegetation.png", width = ncol(vegetation), height = nrow(vegetation))
+png(filename = "output/maps_vegetation.png", width = ncol(vegetation), height = nrow(vegetation))
 par(mfrow = c(2, 2), mar = c(0.1, 0.1, 0.1, 0.1))
 plot(vegetation[[1]], legend=F, col=viridis(n = 10,option = "D"),axes=F, main = "", box=F)
 plot(vegetation[[2]], legend=T, col=viridis(n = 10,option = "D"),axes=F, main = "", box=F, legend.args=list(text='PC axis', side=4, font=2, line=2.5, cex=0.8))
@@ -85,7 +83,7 @@ plot(vegetation[[4]], legend=F, col=viridis(n = 10,option = "D"),axes=F, main = 
 dev.off()
 
 ## Beekeepimg
-png(filename = "~/Dropbox/City4bees/Analyses/bees_switzerland/OUTPUT/maps_beekeeping.png", width = ncol(beekeeping), height = nrow(beekeeping))
+png(filename = "output/maps_beekeeping.png", width = ncol(beekeeping), height = nrow(beekeeping))
 par(mfrow = c(2, 2), mar = c(0.1, 0.1, 0.1, 0.1))
 plot(beekeeping[[5]], legend=F, col=viridis(n = 10,option = "D"),axes=F, main = "", box=F)
 plot(beekeeping[[6]], legend=T, col=viridis(n = 10,option = "D"),axes=F, main = "", box=F, legend.args=list(text='N. beehives 2500', side=4, font=2, line=2.5, cex=0.8))
@@ -94,7 +92,7 @@ plot(beekeeping[[8]], legend=F, col=viridis(n = 10,option = "D"),axes=F, main = 
 dev.off()
 
 ## Lu
-png(filename = "~/Dropbox/City4bees/Analyses/bees_switzerland/OUTPUT/maps_lu.png", width = ncol(lu), height = nrow(lu))
+png(filename = "output/maps_lu.png", width = ncol(lu), height = nrow(lu))
 par(mfrow = c(3, 4), mar = c(0.1, 0.1, 0.1, 0.1))
 # Urban
 plot(lu[[1]], legend=F, col=viridis(n = 10,option = "D"),axes=F, main = "", box=F) # Urban
@@ -152,7 +150,7 @@ plot.arranged=ggarrange(elevation.climate,elevation.vegetation,elevation.lu,elev
                         nrow = 2, ncol=4,
                         labels=paste("(", letters[1:4], ")", sep=""))
 ## Export
-plot.arranged %>% ggexport(filename = ("OUTPUT/Elevation_vs_predictors/FigS_predictors_elevation.png"),
+plot.arranged %>% ggexport(filename = ("output/predictors_elevation.png"),
                            width = 1000, height = 1000)
-plot.arranged %>% ggexport(filename = ("OUTPUT/Elevation_vs_predictors/FigS_predictors_elevation.pdf"),
+plot.arranged %>% ggexport(filename = ("output/predictors_elevation.pdf"),
                            width = 10, height = 10)

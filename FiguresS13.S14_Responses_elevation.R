@@ -1,17 +1,15 @@
 #######################################
-### Paper:
-###
-### Author:
-### Date: 
-###
-###
+### Paper: Wild bee taxonomic and functional metrics reveal a spatial mismatch between α- and ß-diversity in Switzerland
+### Script to produce Figure S13-S14 Elevation vs. responses
+### Author: Joan Casanelles-Abella & Bertrand Fournier
+### Date: 19.01.2023
 #######################################
 ### ===================================
 ###  Initialise the system
 ### ===================================
 # Remove all R objects in the workspace
 rm(list = ls())
-setwd("~/Dropbox/City4bees/Analyses/bees_switzerland//")
+setwd("input")
 # Packages
 require(raster)
 require(viridis)
@@ -22,10 +20,7 @@ library(sf)
 ###  Data
 ### ===================================
 ### load the data -----------------------------------------------------------------------
-rasterstack.responses=stackOpen("~/Dropbox/City4bees/Analyses/bees_switzerland/DATA/Selected descriptors/Results_2022_04_28/Masked_responses/rasterstack.responses.tif")
-names(rasterstack.responses) = c("FDis", "TED", "TOP", "LCBD_fun", "LCBD_taxo", "shannon", "rich")
-
-div <- stack("~/Dropbox/City4bees/Analyses/bees_switzerland/DATA/Selected descriptors/Results_2022_04_28/Diversity_stack_revised_Selected_descriptors.tif")
+div <- stack("Diversity_stack_revised_Selected_descriptors.tif")
 names(div) = c("belowgound","cleptoparasite","FDis", "feeding_specialization", 
                "FEve", "FRic", "InvSimpson", "ITD","LCBD_fun" ,"LCBD_taxo","phenoduration",
                "phenostart", "Rao", "Richness", "Shannon",  "Simpson",
@@ -48,9 +43,9 @@ ITD <- div$ITD
 solitary <- div$solitary
 tong_length<- div$tong_length
 ### water bodies
-water_bodies=raster("~/Dropbox/City4bees/Analyses/bees_switzerland/DATA/water_bodies1.tif")
+water_bodies=raster("water_bodies1.tif")
 ### Elevation
-elevation = raster("~/Dropbox/City4bees/Analyses/bees_switzerland/DATA/dhm_25.tif")
+elevation = raster("dhm_25.tif")
 
 ### Extract community attributes
 TOP.extr=data.frame(TOP=raster::extract(rasterstack.responses$TOP, coordinates(water_bodies)), coordinates(water_bodies))
@@ -106,7 +101,7 @@ for(r in 1:length(list.responses)){
     ylab(paste(colnames(response.dat.random.ele)[3])) + 
     theme(
       legend.title = element_blank(), legend.position = "none")
-   ggsave(plot = plot.elevation, filename = paste("~/Dropbox/City4bees/Analyses/bees_switzerland/OUTPUT/Elevation_vs_responses/Elevation_", colnames(response.dat.random.ele)[3], ".png", sep=""), device = "png", width = 4, height = 4) 
+   ggsave(plot = plot.elevation, filename = paste("output/Elevation_", colnames(response.dat.random.ele)[3], ".png", sep=""), device = "png", width = 4, height = 4) 
 }
 
 
@@ -128,63 +123,5 @@ for(r in 1:length(list.traits)){
     ylab(paste(colnames(response.dat.random.ele)[3])) + 
     theme(
       legend.title = element_blank(), legend.position = "none")
-  ggsave(plot = plot.elevation, filename = paste("~/Dropbox/City4bees/Analyses/bees_switzerland/OUTPUT/Elevation_vs_responses/Elevation_", colnames(response.dat.random.ele)[3], ".png", sep=""), device = "png", width = 4, height = 4) 
+  ggsave(plot = plot.elevation, filename = paste("output/Elevation_", colnames(response.dat.random.ele)[3], ".png", sep=""), device = "png", width = 4, height = 4) 
 }
-
-names.r=names(rasterstack.responses)
-calc.responses=list()
-for(i in 1:length(names.r)){
-  cat(names.r[i])
-  dat.extr1=data.frame(rich=raster::extract(rasterstack.responses[[i]], coordinates(water_bodies)), coordinates(water_bodies))
-  elevation.extr1=data.frame(elevation=raster::extract(elevation, coordinates(water_bodies)), coordinates(water_bodies))
-  
-  calc_res=cbind(dat.extr1,elevation.extr1[,1])
-  calc_res=na.omit(calc_res)
-  calc_res_2000 = data.frame(mean=mean(calc_res[calc_res$`elevation.extr1[, 1]` %in% 2000:3500,1], na.rm=T), 
-                             median=median(calc_res[calc_res$`elevation.extr1[, 1]` %in% 2000:3500,1], na.rm=T),
-                             sd=sd(calc_res[calc_res$`elevation.extr1[, 1]` %in% 2000:3500,1], na.rm=T), 
-                             min=min(calc_res[calc_res$`elevation.extr1[, 1]` %in% 2000:3500,1], na.rm=T),
-                             max=max(calc_res[calc_res$`elevation.extr1[, 1]` %in% 2000:3500,1], na.rm=T),
-                             elevation=">2000",
-                             response=paste(names.r[i]))
-  
-  calc_res_1500_2000 =data.frame(mean=mean(calc_res[calc_res$`elevation.extr1[, 1]` %in% 1500:2000,1], na.rm=T), 
-                                 median=median(calc_res[calc_res$`elevation.extr1[, 1]` %in% 1500:2000,1], na.rm=T),
-                                 sd=sd(calc_res[calc_res$`elevation.extr1[, 1]` %in% 1500:2000,1], na.rm=T), 
-                                 min=min(calc_res[calc_res$`elevation.extr1[, 1]` %in% 1500:2000,1], na.rm=T),
-                                 max=max(calc_res[calc_res$`elevation.extr1[, 1]` %in% 1500:2000,1], na.rm=T),
-                                 elevation="1500.2000",
-                                 response=paste(names.r[i]))
-  
-  calc_res_1000_1500=data.frame(mean=mean(calc_res[calc_res$`elevation.extr1[, 1]` %in% 1000:1500,1], na.rm=T), 
-                                median=median(calc_res[calc_res$`elevation.extr1[, 1]` %in% 1000:1500,1], na.rm=T),
-                                sd=sd(calc_res[calc_res$`elevation.extr1[, 1]` %in% 1000:1500,1], na.rm=T), 
-                                min=min(calc_res[calc_res$`elevation.extr1[, 1]` %in% 1000:1500,1], na.rm=T),
-                                max=max(calc_res[calc_res$`elevation.extr1[, 1]` %in% 1000:1500,1], na.rm=T),
-                                elevation="1000-1500",
-                                response=paste(names.r[i]))
-  
-  calc_res_500_1000=data.frame(mean=mean(calc_res[calc_res$`elevation.extr1[, 1]` %in% 500:1000,1], na.rm=T), 
-                               median=median(calc_res[calc_res$`elevation.extr1[, 1]` %in% 500:1000,1], na.rm=T),
-                               sd=sd(calc_res[calc_res$`elevation.extr1[, 1]` %in% 500:1000,1], na.rm=T), 
-                               min=min(calc_res[calc_res$`elevation.extr1[, 1]` %in% 500:1000,1], na.rm=T),
-                               max=max(calc_res[calc_res$`elevation.extr1[, 1]` %in% 500:1000,1], na.rm=T),
-                               elevation="500-1000",
-                               response=paste(names.r[i]))
-  
-  calc_res_100_500=data.frame(mean=mean(calc_res[calc_res$`elevation.extr1[, 1]` %in% 100:500,]$rich, na.rm=T), 
-                              median=median(calc_res[calc_res$`elevation.extr1[, 1]` %in% 100:500,]$rich, na.rm=T),
-                              sd=sd(calc_res[calc_res$`elevation.extr1[, 1]` %in% 100:500,]$rich, na.rm=T), 
-                              min=min(calc_res[calc_res$`elevation.extr1[, 1]` %in% 100:500,]$rich, na.rm=T),
-                              max=max(calc_res[calc_res$`elevation.extr1[, 1]` %in% 100:500,]$rich, na.rm=T),
-                              elevation="100-500",
-                              response=paste(names.r[i]))
-  
-  calc.responses[[i]]=rbind(calc_res_2000,calc_res_1500_2000,calc_res_1000_1500,calc_res_500_1000,calc_res_100_500)
-}
-
-calc.responses.ul=do.call(what = rbind, calc.responses)
-
-
-
-
