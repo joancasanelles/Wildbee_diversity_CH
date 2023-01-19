@@ -2,7 +2,7 @@
 
 ## Description
 
-This repository contains the scripts for the figures in the paper "Wild bee taxonomic and functional metrics reveal a spatial mismatch between α- and ß-diversity in Switzerland" in Conservation Biology.
+This repository contains the scripts for the figures in the paper "*Wild bee taxonomic and functional metrics reveal a spatial mismatch between α- and ß-diversity in Switzerland*" in Conservation Biology.
 
 ## Data
 
@@ -12,15 +12,13 @@ The data includes the following:
 
 -   The calculated community-level metrics (the responses) used in the paper:
 
-    -   Alpha taxonomic community metrics: species richness and Shannon diversity
+    -   **Alpha taxonomic community metrics: s**pecies richness and Shannon diversity
 
-    -   Alpha functional community metrics: Functional richness (using the
-        Trait Onion Peeling index, TOP), functional eveness (using the Trait
-        Even Distribution index, TED) and the functional dispersion.
+    -   **Alpha functional community metrics:** Functional richness (using the Trait Onion Peeling index, TOP), functional eveness (using the Trait Even Distribution index, TED) and the functional dispersion.
 
-    -   Community weighted means of 8 functional traits
+    -   **Community weighted means of 8 functional traits**
 
-    -   The local community contributions on the functional and taxonomic beta diversity (LCBD).
+    -   **The local community contributions on the functional and taxonomic beta diversity (LCBD).**
 
 -   The environmental predictors used for the modelling
 
@@ -33,5 +31,13 @@ When using the data, please cite is as: "Joan Casanelles Abella; Bertrand Fourni
 ## Scripts
 
 The scripts included are the following:
+
+-   Diversity_modelling_caret.R = This script was used to perform the spatial biodiversity models
+
+-   S
+
+-   S
+
+-   S
 
 -   
